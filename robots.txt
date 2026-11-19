@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://allfreegamesoftheworld.github.io/sitemap.xml

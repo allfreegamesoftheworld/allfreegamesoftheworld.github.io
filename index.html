@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All Free Games of the World – az összes ingyenes Steam-játék, méret és korhatár szerint szűrve</title>
+<meta name="description" content="Az összes megjelent ingyenes Steam-játék egy oldalon. Szűrj méretre (GB), korhatárra, műfajra, hangulatra (vicces, horror, cuki…), és töltsd le egy kattintással a Steamről.">
+<link rel="canonical" href="https://allfreegamesoftheworld.github.io/">
+<meta property="og:url" content="https://allfreegamesoftheworld.github.io/">
+<meta property="og:site_name" content="All Free Games of the World">
+<meta property="og:type" content="website">
+<meta property="og:title" content="All Free Games of the World – az összes ingyenes játék a Steamen">
+<meta property="og:description" content="Közel 20 000 ingyenes Steam-játék, szűrhető méretre, korhatárra és műfajra.">
+<meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/570/header.jpg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <button id="toggleFilters" class="btn ghost only-mobile" aria-label="Szűrők">☰ Szűrők</button>
+  <div class="brand">
+    <span class="logo">▶</span>
+    <div>
+      <h1>All Free Games of the World</h1>
+      <div class="sub" id="stats">Betöltés…</div>
+    </div>
+  </div>
+  <div class="search">
+    <input id="q" type="search" placeholder="Keresés név, fejlesztő vagy címke szerint… (pl. Dota 2)" autocomplete="off">
+  </div>
+  <select id="sort" class="select" title="Rendezés">
+    <option value="pop">Legnépszerűbb</option>
+    <option value="rating">Legjobb értékelés</option>
+    <option value="new">Legújabb</option>
+    <option value="old">Legrégebbi</option>
+    <option value="name">Név (A–Z)</option>
+    <option value="small">Méret: legkisebb</option>
+    <option value="big">Méret: legnagyobb</option>
+  </select>
+</header>
+
+<div class="layout">
+  <aside class="filters" id="filters">
+    <div class="fhead">
+      <strong>Szűrők</strong>
+      <button id="reset" class="link">Összes törlése</button>
+    </div>
+
+    <section>
+      <h3>Méret</h3>
+      <div class="chips" id="sizeChips"></div>
+      <div class="row">
+        <label>min <input id="sizeMin" type="number" min="0" step="0.5" placeholder="0"> GB</label>
+        <label>max <input id="sizeMax" type="number" min="0" step="0.5" placeholder="∞"> GB</label>
+      </div>
+      <label class="check"><input id="sizeUnknown" type="checkbox" checked> Ismeretlen méretűek is</label>
+    </section>
+
+    <section>
+      <h3>Korhatár</h3>
+      <select id="age" class="select full">
+        <option value="">Bármely</option>
+        <option value="7">Gyerekbarát (legfeljebb 7+)</option>
+        <option value="12">Legfeljebb 12+</option>
+        <option value="16">Legfeljebb 16+</option>
+        <option value="18only">Csak 18+</option>
+      </select>
+      <label class="check"><input id="ageUnknown" type="checkbox" checked> Ismeretlen korhatárúak is</label>
+    </section>
+
+    <section>
+      <h3>Hangulat</h3>
+      <div class="chips" id="moodChips"></div>
+    </section>
+
+    <section>
+      <h3>Műfaj</h3>
+      <div class="chips" id="genreChips"></div>
+    </section>
+
+    <section>
+      <h3>Játékmód</h3>
+      <div class="chips" id="modeChips"></div>
+    </section>
+
+    <section>
+      <h3>Címkék <small>(1× = kell, 2× = kizár)</small></h3>
+      <input id="tagSearch" class="input" type="search" placeholder="Címke keresése…">
+      <div class="chips scroll" id="tagChips"></div>
+    </section>
+
+    <section>
+      <h3>Értékelés</h3>
+      <select id="rating" class="select full">
+        <option value="0">Bármely</option>
+        <option value="50">Legalább 50% pozitív</option>
+        <option value="70">Legalább 70% pozitív</option>
+        <option value="80">Legalább 80% pozitív</option>
+        <option value="90">Legalább 90% pozitív</option>
+      </select>
+      <label class="row">Min. értékelésszám <input id="minReviews" type="number" min="0" step="10" placeholder="0"></label>
+    </section>
+
+    <section>
+      <h3>Platform</h3>
+      <div class="chips" id="platChips"></div>
+    </section>
+
+    <section>
+      <h3>Megjelenés éve</h3>
+      <div class="row">
+        <input id="yearMin" type="number" min="1990" max="2100" placeholder="tól">
+        <input id="yearMax" type="number" min="1990" max="2100" placeholder="ig">
+      </div>
+    </section>
+
+    <p class="foot" id="syncInfo"></p>
+    <p class="foot">Nem hivatalos oldal, nem kapcsolódik a Valve-hoz. A Steam a Valve Corporation védjegye; a játékok adatai és képei a jogtulajdonosaiké. <a href="jogi.html">Jogi információk</a></p>
+  </aside>
+
+  <main>
+    <div class="active" id="activeBar"></div>
+    <div class="grid" id="grid"></div>
+    <div id="sentinel"></div>
+    <div class="empty" id="empty" hidden>Nincs a szűrőknek megfelelő játék.</div>
+    <footer class="legal">
+      Nem hivatalos, rajongói oldal – nem áll kapcsolatban a Valve Corporationnel, és a Valve nem támogatja.
+      A Steam és a Steam-logó a Valve Corporation védjegyei. A játékok nevei, képei és leírásai a jogtulajdonosaik
+      (fejlesztők, kiadók) tulajdonát képezik; az adatok forrása a nyilvános Steam áruház.
+      · <a href="jogi.html">Jogi információk és eltávolítási kérés</a>
+    </footer>
+  </main>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="backdrop" data-close></div>
+  <article class="sheet" role="dialog" aria-modal="true">
+    <div class="hero" id="mHero">
+      <button class="close" data-close aria-label="Bezárás">✕</button>
+      <div class="heroInner">
+        <img id="mImg" alt="">
+        <div class="heroText">
+          <h2 id="mName"></h2>
+          <div class="facts" id="mFacts"></div>
+        </div>
+        <div class="buy">
+          <button class="btn steam" id="mSteam">⬇ Beszerzés Steamen</button>
+          <a class="small" id="mWeb" target="_blank" rel="noopener">vagy megnyitás a Steam weboldalán ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="mainCol">
+        <div class="media" id="mMedia"></div>
+        <div class="descHead">
+          <h3>Leírás</h3>
+          <label class="tr">Fordítás:
+            <select id="mLang" class="select">
+              <option value="">Eredeti (angol)</option>
+              <option value="hu">Magyar</option>
+              <option value="en">English</option>
+              <option value="de">Deutsch</option>
+              <option value="fr">Français</option>
+              <option value="es">Español</option>
+              <option value="it">Italiano</option>
+              <option value="pt">Português</option>
+              <option value="pl">Polski</option>
+              <option value="cs">Čeština</option>
+              <option value="sk">Slovenčina</option>
+              <option value="ro">Română</option>
+              <option value="hr">Hrvatski</option>
+              <option value="sr">Srpski</option>
+              <option value="uk">Українська</option>
+              <option value="ru">Русский</option>
+              <option value="tr">Türkçe</option>
+              <option value="nl">Nederlands</option>
+              <option value="sv">Svenska</option>
+              <option value="ja">日本語</option>
+              <option value="ko">한국어</option>
+              <option value="zh-CN">中文</option>
+              <option value="ar">العربية</option>
+            </select>
+          </label>
+        </div>
+        <p class="trStatus" id="mTrStatus"></p>
+        <div class="desc" id="mDesc"></div>
+        <p class="small src" id="mSrc"></p>
+      </div>
+      <aside class="side" id="mSide"></aside>
+    </div>
+  </article>
+</div>
+
+<script src="stats-config.js"></script>
+<script src="tracker.js"></script>
+<script src="data/meta.js"></script>
+<script src="data/games.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin | All Free Games of the World</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  .statsWrap { max-width: 1150px; margin: 24px auto 60px; padding: 0 20px; }
+  .login { max-width: 460px; margin: 60px auto; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 26px; }
+  .login h1 { font-size: 22px; margin: 0 0 6px; }
+  .login label { display: block; margin: 14px 0 6px; color: var(--muted); font-size: 13px; }
+  .login .input { margin: 0; }
+  .login .btn.steam { width: 100%; justify-content: center; margin-top: 18px; }
+  .err { color: var(--bad); font-size: 13px; min-height: 18px; margin-top: 10px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 16px 0 22px; }
+  .kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .kpi .v { font-size: 28px; font-weight: 700; line-height: 1.2; }
+  .kpi .l { color: var(--muted); font-size: 12.5px; }
+  .bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+  .bar .left { display: flex; gap: 8px; flex-wrap: wrap; }
+  .panelBox { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 18px; overflow-x: auto; }
+  .panelBox h2 { font-size: 15px; margin: 0 0 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { color: var(--muted); font-weight: 600; cursor: pointer; user-select: none; }
+  td.num, th.num { text-align: right; }
+  td.name { white-space: normal; min-width: 200px; }
+  .chart { display: flex; align-items: flex-end; gap: 3px; height: 140px; padding-top: 10px; }
+  .chart div { flex: 1; background: linear-gradient(180deg, #4cc2ff, #1a6fd0); border-radius: 3px 3px 0 0; min-height: 2px; position: relative; }
+  .chart div:hover::after { content: attr(data-t); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #000; padding: 2px 6px; border-radius: 4px; font-size: 11px; white-space: nowrap; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 800px) { .two { grid-template-columns: 1fr; } }
+  .muted { color: var(--muted); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="../" style="text-decoration:none;color:inherit">
+    <span class="logo">▶</span>
+    <div><div style="font-weight:700">All Free Games of the World</div><div class="sub">Statisztika – csak az üzemeltetőnek</div></div>
+  </a>
+  <div style="flex:1"></div>
+  <button class="btn ghost" id="logout" hidden>Kilépés</button>
+</header>
+
+<section class="login" id="loginBox" hidden>
+  <h1>🔒 Admin</h1>
+  <p class="muted">Add meg az admin-jelszót a statisztika megtekintéséhez.</p>
+  <label for="pw">Admin-jelszó</label>
+  <input class="input" id="pw" type="password" autocomplete="current-password">
+  <button class="btn steam" id="loginBtn">Belépés</button>
+  <div class="err" id="loginErr"></div>
+</section>
+
+<section class="login" id="setupBox" hidden>
+  <h1>⚙ Első beállítás</h1>
+  <p class="muted">Egyszer kell megcsinálni. A GoatCounter csak olvasási jogú kulcsát itt, a <b>te böngésződben</b> titkosítjuk az általad választott admin-jelszóval. Az oldalba csak a titkosított változat kerül; a jelszó nélkül senki nem tudja feloldani.</p>
+  <label for="setKey">GoatCounter API-kulcs (a GoatCounter „API” oldalán: <i>show</i> → másolás)</label>
+  <input class="input" id="setKey" type="password" autocomplete="off">
+  <label for="setPw">Új admin-jelszó (legalább 10 karakter)</label>
+  <input class="input" id="setPw" type="password" autocomplete="new-password">
+  <label for="setPw2">Admin-jelszó még egyszer</label>
+  <input class="input" id="setPw2" type="password" autocomplete="new-password">
+  <button class="btn steam" id="setupBtn">Ellenőrzés és titkosítás</button>
+  <div class="err" id="setupErr"></div>
+  <textarea id="vaultOut" class="input" rows="4" readonly hidden style="margin-top:12px;font-family:monospace;font-size:11px"></textarea>
+</section>
+
+<main class="statsWrap" id="dash" hidden>
+  <div class="bar">
+    <div class="left" id="ranges"></div>
+    <span class="muted" id="updated"></span>
+  </div>
+  <div class="kpis" id="kpis"></div>
+  <div class="panelBox"><h2>Látogatók naponta</h2><div class="chart" id="chart"></div><div class="muted" id="chartNote"></div></div>
+  <div class="panelBox">
+    <div class="bar"><h2>Játékok</h2><input class="input" id="gameFilter" placeholder="Szűrés név szerint…" style="max-width:260px"></div>
+    <table id="gamesTable">
+      <thead><tr>
+        <th data-k="name">Játék</th>
+        <th class="num" data-k="open">Megnyitás (ablak)</th>
+        <th class="num" data-k="page">Saját oldal megtekintés</th>
+        <th class="num" data-k="steam">„Beszerzés Steamen” gomb</th>
+        <th class="num" data-k="web">Steam-weboldal link</th>
+        <th class="num" data-k="conv">Steamre továbbítás %</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="muted" id="gamesNote"></div>
+  </div>
+  <div class="two">
+    <div class="panelBox"><h2>Legnézettebb oldalak</h2><table id="pagesTable"><tbody></tbody></table></div>
+    <div class="panelBox"><h2>Honnan jöttek? (hivatkozók)</h2><table id="refsTable"><tbody></tbody></table></div>
+  </div>
+  <div class="two">
+    <div class="panelBox"><h2>Országok</h2><table id="locTable"><tbody></tbody></table></div>
+    <div class="panelBox"><h2>Fordítás nyelvei</h2><table id="trTable"><tbody></tbody></table></div>
+  </div>
+  <p class="muted">Az adatok névtelenek és összesítettek (GoatCounter). A számok egyedi látogatókat jelentenek az adott időszakban; egy látogató többször is megnyithat egy játékot.
+  Részletesebb nézet: <a id="gcLink" target="_blank" rel="noopener">GoatCounter irányítópult ↗</a></p>
+</main>
+
+<script src="../stats-config.js"></script>
+<script src="vault.js"></script>
+<script src="../data/games.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
