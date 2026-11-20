@@ -284,10 +284,10 @@
     if (d && d.movie) { const v = el('video'); v.src = d.movie.src; v.poster = d.movie.poster; v.controls = true; v.preload = 'none'; v.muted = true; media.append(v); }
     for (const s of (d && d.shots) || []) { const im = el('img'); im.loading = 'lazy'; im.src = s.t; im.onclick = () => lightbox(s.f); media.append(im); }
     // leírás
-    original = d ? sanitize(d.about || (d.short ? `<p>${esc(d.short)}</p>` : '')) : '';
-    if (!original) original = '<p class="small">Ehhez a játékhoz még nincs letöltve leírás.</p>';
-    if (d && d.partial) original += '<p class="small">ℹ A teljes leírás, a képek és a pontos méret a háttérben futó szinkronizálással érkeznek.</p>';
+    // csak a rövid hivatalos ismertető – a teljes leírás a Steamen olvasható (szerzői jogi okból nem másoljuk át)
+    original = d && d.short ? `<p class="lead">${esc(d.short)}</p>` : '<p class="small">Ehhez a játékhoz nincs rövid ismertető.</p>';
     $('#mDesc').innerHTML = original;
+    $('#mFull').href = `https://store.steampowered.com/app/${id}/`;
     const owner = d && ((d.pubs && d.pubs.length && d.pubs.join(', ')) || (d.devs && d.devs.join(', ')));
     $('#mSrc').innerHTML = `Leírás és képek forrása: <a href="https://store.steampowered.com/app/${id}/" target="_blank" rel="noopener">a játék Steam-oldala</a>${owner ? ' · © ' + esc(owner) : ''}.`;
     renderSide(g, d);
@@ -391,7 +391,7 @@
     if (e.target.value && window.track) window.track('forditas-' + e.target.value, 'Fordítás: ' + e.target.selectedOptions[0].text);
     translateDesc(e.target.value);
   });
-  $('#mWeb').addEventListener('click', () => { if (current && window.track) window.track('steamweb-' + current, $('#mName').textContent); });
+  ['#mWeb', '#mFull'].forEach((s) => $(s).addEventListener('click', () => { if (current && window.track) window.track('steamweb-' + current, $('#mName').textContent); }));
 
   // ------------------------------------------------------------ indulás
   $('#syncInfo').textContent = GAMES.length
