@@ -324,7 +324,7 @@
     if (d && d.cats && d.cats.length) s.push(`<h4>${esc(T("s_cats"))}</h4><div class="val">${esc(d.cats.join(' · '))}</div>`);
     if (d && d.reqMin) s.push(`<h4>${esc(T("s_req"))}</h4><div class="req">${sanitize(d.reqMin)}</div>`);
     if (d && d.langs) s.push(`<h4>${esc(T("s_langs"))}</h4><div class="req">${sanitize(d.langs)}</div>`);
-    if (d && d.web) s.push(`<h4>${esc(T("s_web"))}</h4><div class="val"><a href="${esc(d.web)}" target="_blank" rel="noopener">${esc(d.web.replace(/^https?:\/\//, '').slice(0, 40))}</a></div>`);
+    if (d && d.web && /^https?:\/\//i.test(d.web)) s.push(`<h4>${esc(T("s_web"))}</h4><div class="val"><a href="${esc(d.web)}" target="_blank" rel="noopener">${esc(d.web.replace(/^https?:\/\//, '').slice(0, 40))}</a></div>`);
     const side = $('#mSide'); side.innerHTML = s.join('');
     side.querySelectorAll('[data-tag]').forEach((t) => t.onclick = () => { S.tags.set(+t.dataset.tag, 1); syncTagChips(); closeModal(); update(); });
   }
