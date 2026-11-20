@@ -51,8 +51,21 @@
     <div><div style="font-weight:700">All Free Games of the World</div><div class="sub">Statisztika – csak az üzemeltetőnek</div></div>
   </a>
   <div style="flex:1"></div>
+  <button class="btn ghost" id="chpwBtn" hidden>🔑 Jelszó módosítása</button>
   <button class="btn ghost" id="logout" hidden>Kilépés</button>
 </header>
+
+<section class="login" id="chpwBox" hidden>
+  <h1>🔑 Admin-jelszó módosítása</h1>
+  <p class="muted">Az új jelszóval a böngésződben újra titkosítjuk a statisztika kulcsát. A jelszót sehova nem küldjük el.</p>
+  <label for="newPw">Új admin-jelszó</label>
+  <input class="input" id="newPw" type="password" autocomplete="new-password">
+  <label for="newPw2">Új jelszó még egyszer</label>
+  <input class="input" id="newPw2" type="password" autocomplete="new-password">
+  <button class="btn steam" id="chpwSave">Új jelszó beállítása</button>
+  <div class="err" id="chpwErr"></div>
+  <textarea id="chpwOut" class="input" rows="4" readonly hidden style="margin-top:12px;font-family:monospace;font-size:11px"></textarea>
+</section>
 
 <section class="login" id="loginBox" hidden>
   <h1>🔒 Admin</h1>
@@ -118,6 +131,6 @@
 <script src="../stats-config.js?v=202611200015"></script>
 <script src="vault.js?v=20261120002038"></script>
 <script src="../data/games.js"></script>
-<script src="admin.js?v=202611201940"></script>
+<script src="admin.js?v=202611210100"></script>
 </body>
 </html>

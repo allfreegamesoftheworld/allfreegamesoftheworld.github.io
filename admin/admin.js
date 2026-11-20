@@ -72,6 +72,22 @@
     err.textContent = '✔ Kész! A kulcs működik és titkosítva lett. Szólj Claude-nak, hogy mentse el (a titkosított szöveg lent látható – ez jelszó nélkül használhatatlan).';
   });
 
+  // ------------------------------------------------------------ jelszó módosítása (belépve, a kulcs már megvan)
+  $('#chpwBtn').addEventListener('click', () => { const b = $('#chpwBox'); b.hidden = !b.hidden; if (!b.hidden) $('#newPw').focus(); });
+  $('#chpwSave').addEventListener('click', async () => {
+    const pw = $('#newPw').value, pw2 = $('#newPw2').value, err = $('#chpwErr');
+    err.style.color = '';
+    if (!auth || !auth.key || auth.code === 'demo') { err.textContent = 'Előbb lépj be.'; return; }
+    if (pw.length < 4) { err.textContent = 'Az új jelszó legyen legalább 4 karakter.'; return; }
+    if (pw !== pw2) { err.textContent = 'A két jelszó nem egyezik.'; return; }
+    err.textContent = 'Titkosítás…';
+    const vault = await encrypt(auth.key, pw);
+    $('#chpwOut').value = JSON.stringify(vault); $('#chpwOut').hidden = false;
+    $('#newPw').value = ''; $('#newPw2').value = '';
+    err.style.color = 'var(--good)';
+    err.textContent = '✔ Kész! Szólj Claude-nak, hogy töltse fel. Addig a régi jelszó marad érvényben.';
+  });
+
   // ------------------------------------------------------------ API
   const hoursAgo = (h) => { const d = new Date(Date.now() - h * 3600e3); d.setMinutes(0, 0, 0); return d; };
   const nextHour = () => { const d = new Date(Date.now() + 3600e3); d.setMinutes(0, 0, 0); return d; };
@@ -108,7 +124,7 @@
 
   // ------------------------------------------------------------ irányítópult
   function start() {
-    $('#loginBox').hidden = true; $('#dash').hidden = false; $('#logout').hidden = false;
+    $('#loginBox').hidden = true; $('#dash').hidden = false; $('#logout').hidden = false; $('#chpwBtn').hidden = false;
     $('#gcLink').href = `https://${auth.code}.goatcounter.com`;
     const rb = $('#ranges'); rb.innerHTML = '';
     [[1, 'Ma (24 óra)'], [7, '7 nap'], [30, '30 nap'], [90, '90 nap'], [365, '1 év']].forEach(([d, l]) => {
