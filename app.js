@@ -11,15 +11,20 @@
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+  // ------------------------------------------------------------ nyelv
+  const I = window.i18n || { t: (k) => k, lang: 'hu', locale: 'hu', chosen: false, langs: [], tag: () => null, apply() {} };
+  const T = I.t, LOC = I.locale;
+  const num0 = (n) => Number(n).toLocaleString(LOC);
+  I.apply();
+
   // ------------------------------------------------------------ címkék, műfajok
-  const tagName = (id) => { const t = META.tags && META.tags[id]; return t ? t[0] : '#' + id; };
+  const tagName = (id) => { const t = META.tags && META.tags[id]; return I.tag(id) || (t ? (I.lang === 'hu' ? t[0] : t[1]) : '#' + id); };
   const tagEn = (id) => { const t = META.tags && META.tags[id]; return t ? t[1] : ''; };
-  const GENRE_HU = { 1: 'Akció', 2: 'Stratégia', 3: 'RPG', 4: 'Lazító', 9: 'Versenyzés', 18: 'Sport', 23: 'Indie', 25: 'Kaland', 28: 'Szimuláció', 29: 'MMO', 37: 'Ingyenesen játszható', 70: 'Korai hozzáférés', 71: 'Szexuális tartalom', 72: 'Felnőtt tartalom', 73: 'Erőszakos', 74: 'Véres' };
-  const genreName = (id) => GENRE_HU[id] || (META.genres && META.genres[id]) || ('#' + id);
+  const genreName = (id) => { const s = T('g_' + id); return s !== 'g_' + id ? s : (META.genres && META.genres[id]) || ('#' + id); };
   const MODES = [
-    [2, 'Egyjátékos'], [1, 'Többjátékos'], [9, 'Kooperatív'], [38, 'Online koop'], [49, 'PvP'], [36, 'Online PvP'], [24, 'Osztott képernyő'], [27, 'Platformok közötti'],
+    [2, T('m_single')], [1, T('m_multi')], [9, T('m_coop')], [38, T('m_ocoop')], [49, T('m_pvp')], [36, T('m_opvp')], [24, T('m_split')], [27, T('m_cross')],
   ];
-  const PLATS = [['w', 'Windows'], ['m', 'macOS'], ['l', 'Linux'], ['d', 'Steam Deck ellenőrzött'], ['v', 'VR']];
+  const PLATS = [['w', 'Windows'], ['m', 'macOS'], ['l', 'Linux'], ['d', T('deck')], ['v', 'VR']];
   const SIZES = [['<1', 0, 1024], ['1–5', 1024, 5120], ['5–20', 5120, 20480], ['20–50', 20480, 51200], ['50+', 51200, Infinity]];
   const MOODS = ['Funny', 'Comedy', 'Cute', 'Relaxing', 'Cozy', 'Wholesome', 'Family Friendly', 'Memes', 'Horror', 'Psychological Horror', 'Dark', 'Gore', 'Atmospheric', 'Story Rich', 'Anime', 'Competitive', 'Difficult', 'Addictive', 'Fast-Paced', 'Beautiful'];
 
@@ -56,7 +61,7 @@
       if (next === undefined) S.tags.delete(id); else S.tags.set(id, next);
       syncTagChips(); update();
     }, 't' + id);
-    c.title = tagEn(id) + ' — kattintás: kell / kizár / ki';
+    c.title = tagEn(id) + ' — ' + T('tag_title');
     return c;
   }
   function syncTagChips() {
@@ -76,7 +81,6 @@
       if (id === '37') return; // mind ingyenes
       gc.append(chip(genreName(id), n, (c) => toggleSetChip(S.genres, id, c), 'g' + id));
     });
-    if (!genreCount.size) gc.append(el('span', 'small', 'A műfajok a részletes szinkronizálás közben jelennek meg. Addig használd a címkéket.'));
     const md = $('#modeChips');
     for (const [id, l] of MODES) md.append(chip(l, null, (c) => toggleSetChip(S.modes, id, c), 'm' + id));
     const pc = $('#platChips');
@@ -134,7 +138,7 @@
     rating: (a, b) => score(b) - score(a),
     new: (a, b) => (b.d || 0) - (a.d || 0),
     old: (a, b) => (a.d || 9e12) - (b.d || 9e12),
-    name: (a, b) => a.n.localeCompare(b.n, 'hu'),
+    name: (a, b) => a.n.localeCompare(b.n, LOC),
     small: (a, b) => (a.s ?? 9e12) - (b.s ?? 9e12),
     big: (a, b) => (b.s ?? -1) - (a.s ?? -1),
   };
@@ -144,7 +148,7 @@
   // ------------------------------------------------------------ megjelenítés
   let results = [], shown = 0;
   const grid = $('#grid');
-  const fmtSize = (mb) => mb == null ? '? GB' : mb >= 1024 ? (mb / 1024).toFixed(mb >= 10240 ? 0 : 1).replace('.', ',') + ' GB' : Math.max(1, Math.round(mb)) + ' MB';
+  const fmtSize = (mb) => mb == null ? '? GB' : mb >= 1024 ? (mb / 1024).toLocaleString(LOC, { maximumFractionDigits: mb >= 10240 ? 0 : 1 }) + ' GB' : Math.max(1, Math.round(mb)) + ' MB';
   const ageClass = (a) => a >= 18 ? 'age18' : a >= 16 ? 'age16' : a >= 12 ? 'age12' : 'ageLow';
   const imgUrl = (g) => g.h ? IMG_BASE + g.h : `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${g.i}/header.jpg`;
   const rvClass = (r) => r >= 70 ? 'good' : r >= 40 ? 'mid' : 'bad';
@@ -152,8 +156,8 @@
   function card(g) {
     const c = el('a', 'card');
     c.href = 'jatek/' + g.i + '.html';
-    const age = g.a != null ? `<span class="badge ${ageClass(g.a)}" title="${g.ae ? 'Becsült korhatár' : 'Korhatár'}">${g.a}+${g.ae ? '?' : ''}</span>` : '';
-    const rv = g.c ? `<span class="rv ${rvClass(g.r)}" title="${g.c.toLocaleString('hu')} értékelés">👍 ${g.r}%</span>` : '<span>nincs értékelés</span>';
+    const age = g.a != null ? `<span class="badge ${ageClass(g.a)}" title="${esc(g.ae ? T('est_age') : T('age'))}">${g.a}+${g.ae ? '?' : ''}</span>` : '';
+    const rv = g.c ? `<span class="rv ${rvClass(g.r)}" title="${esc(T('reviews_n', num0(g.c)))}">👍 ${g.r}%</span>` : `<span>${esc(T('no_reviews'))}</span>`;
     const year = g.d ? new Date(g.d * 1000).getFullYear() : '';
     c.innerHTML = `<div class="thumb"><img loading="lazy" src="${imgUrl(g)}" alt=""><div class="badges">${age}</div></div>
       <div class="cbody"><div class="cname">${esc(g.n)}</div>
@@ -177,7 +181,7 @@
     shown = 0; grid.innerHTML = '';
     renderMore();
     $('#empty').hidden = results.length > 0;
-    $('#stats').textContent = `${results.length.toLocaleString('hu')} / ${GAMES.length.toLocaleString('hu')} megjelent ingyenes játék`;
+    $('#stats').textContent = T('stats', num0(results.length), num0(GAMES.length));
     renderActive();
   }
   new IntersectionObserver((en) => { if (en[0].isIntersecting && shown < results.length) renderMore(); }, { rootMargin: '1200px' }).observe($('#sentinel'));
@@ -185,7 +189,7 @@
   function renderActive() {
     const bar = $('#activeBar'); bar.innerHTML = '';
     const add = (label, fn) => { const c = el('span', 'chip', esc(label) + ' ✕'); c.onclick = () => { fn(); syncAll(); update(); }; bar.append(c); };
-    for (const [id, v] of S.tags) add((v === -1 ? 'nem: ' : '') + tagName(id), () => S.tags.delete(id));
+    for (const [id, v] of S.tags) add((v === -1 ? T('not_prefix') : '') + tagName(id), () => S.tags.delete(id));
     for (const i of S.sizes) add(SIZES[i][0] + ' GB', () => S.sizes.delete(i));
     for (const g of S.genres) add(genreName(g), () => S.genres.delete(g));
     for (const m of S.modes) add(MODES.find((x) => x[0] === m)[1], () => S.modes.delete(m));
@@ -263,7 +267,7 @@
 
   let current = null, original = '';
   async function openModal(id) {
-    const g = GAMES.find((x) => x.i === id) || { i: id, n: 'Steam játék #' + id, t: [] };
+    const g = GAMES.find((x) => x.i === id) || { i: id, n: 'Steam #' + id, t: [] };
     current = id;
     window.track && window.track('megnyitas-' + id, g.n);
     $('#modal').hidden = false; document.body.style.overflow = 'hidden';
@@ -272,7 +276,7 @@
     $('#mHero').style.backgroundImage = '';
     $('#mWeb').href = `https://store.steampowered.com/app/${id}/`;
     $('#mLang').value = ''; $('#mTrStatus').textContent = '';
-    $('#mDesc').innerHTML = '<p class="small">Betöltés…</p>';
+    $('#mDesc').innerHTML = `<p class="small">${esc(T('loading'))}</p>`;
     $('#mMedia').innerHTML = ''; $('#mSide').innerHTML = '';
     renderFacts(g, null);
     const d = await loadDetail(id);
@@ -285,39 +289,42 @@
     for (const s of (d && d.shots) || []) { const im = el('img'); im.loading = 'lazy'; im.src = s.t; im.onclick = () => lightbox(s.f); media.append(im); }
     // leírás
     // csak a rövid hivatalos ismertető – a teljes leírás a Steamen olvasható (szerzői jogi okból nem másoljuk át)
-    original = d && d.short ? `<p class="lead">${esc(d.short)}</p>` : '<p class="small">Ehhez a játékhoz nincs rövid ismertető.</p>';
+    original = d && d.short ? `<p class="lead">${esc(d.short)}</p>` : `<p class="small">${esc(T('no_short'))}</p>`;
     $('#mDesc').innerHTML = original;
     $('#mFull').href = `https://store.steampowered.com/app/${id}/`;
     const owner = d && ((d.pubs && d.pubs.length && d.pubs.join(', ')) || (d.devs && d.devs.join(', ')));
-    $('#mSrc').innerHTML = `Leírás és képek forrása: <a href="https://store.steampowered.com/app/${id}/" target="_blank" rel="noopener">a játék Steam-oldala</a>${owner ? ' · © ' + esc(owner) : ''}.`;
+    $('#mSrc').innerHTML = `${esc(T('src'))} <a href="https://store.steampowered.com/app/${id}/" target="_blank" rel="noopener">${esc(T('src_link'))}</a>${owner ? ' · © ' + esc(owner) : ''}.`;
     renderSide(g, d);
+    // ha a látogató maga választott nem angol nyelvet, a rövid ismertetőt automatikusan lefordítjuk
+    if (I.chosen && I.lang !== 'en' && d && d.short) { $('#mLang').value = I.lang; translateDesc(I.lang); }
   }
   function renderFacts(g, d) {
     let size = d && d.size != null ? d.size : g.s;
     if (size > 204800) size = null; // 200 GB felett: a fejlesztő elírása
     const age = d && d.age != null ? d.age : g.a;
     const f = [];
-    f.push(`<span class="fact"><b>Méret</b>${fmtSize(size)}</span>`);
-    f.push(`<span class="fact"><b>Korhatár</b>${age != null ? age + '+' + ((d ? d.ageEst : g.ae) ? ' (becsült)' : '') : 'nincs megadva'}</span>`);
-    if (g.c) f.push(`<span class="fact"><b>Értékelés</b><span class="rv ${rvClass(g.r)}">${g.r}% pozitív</span> · ${g.c.toLocaleString('hu')}</span>`);
-    const date = g.d ? new Date(g.d * 1000).toLocaleDateString('hu', { year: 'numeric', month: 'long', day: 'numeric' }) : (d && d.date) || '';
-    if (date) f.push(`<span class="fact"><b>Megjelenés</b>${esc(date)}</span>`);
+    f.push(`<span class="fact"><b>${esc(T('size'))}</b>${fmtSize(size)}</span>`);
+    f.push(`<span class="fact"><b>${esc(T('age'))}</b>${age != null ? age + '+' + ((d ? d.ageEst : g.ae) ? ' ' + esc(T('estimated')) : '') : esc(T('not_given'))}</span>`);
+    if (g.c) f.push(`<span class="fact"><b>${esc(T('rating'))}</b><span class="rv ${rvClass(g.r)}">${esc(T('positive', g.r))}</span> · ${num0(g.c)}</span>`);
+    let date = '';
+    try { date = g.d ? new Date(g.d * 1000).toLocaleDateString(LOC, { year: 'numeric', month: 'long', day: 'numeric' }) : (d && d.date) || ''; } catch (e) { date = new Date(g.d * 1000).toISOString().slice(0, 10); }
+    if (date) f.push(`<span class="fact"><b>${esc(T('release'))}</b>${esc(date)}</span>`);
     if (d && d.meta) f.push(`<span class="fact"><b>Metacritic</b>${d.meta}</span>`);
-    f.push('<span class="fact">Ingyenes</span>');
+    f.push(`<span class="fact">${esc(T('free'))}</span>`);
     $('#mFacts').innerHTML = f.join('');
   }
   function renderSide(g, d) {
     const s = [];
-    if (d && d.devs && d.devs.length) s.push(`<h4>Fejlesztő</h4><div class="val">${esc(d.devs.join(', '))}</div>`);
-    if (d && d.pubs && d.pubs.length) s.push(`<h4>Kiadó</h4><div class="val">${esc(d.pubs.join(', '))}</div>`);
-    if (d && d.genres && d.genres.length) s.push(`<h4>Műfaj</h4><div class="val">${esc(d.genres.join(', '))}</div>`);
-    if (g.t && g.t.length) s.push(`<h4>Címkék</h4><div class="tags">${g.t.map((t) => `<span data-tag="${t}">${esc(tagName(t))}</span>`).join('')}</div>`);
-    if (d && d.ageSrc) s.push(`<h4>Korhatár forrása</h4><div class="val">${esc(d.ageSrc)}</div>`);
-    if (d && d.notes) s.push(`<h4>Tartalmi figyelmeztetés</h4><div class="val">${esc(d.notes)}</div>`);
-    if (d && d.cats && d.cats.length) s.push(`<h4>Funkciók</h4><div class="val">${esc(d.cats.join(' · '))}</div>`);
-    if (d && d.reqMin) s.push(`<h4>Minimális gépigény</h4><div class="req">${sanitize(d.reqMin)}</div>`);
-    if (d && d.langs) s.push(`<h4>Nyelvek</h4><div class="req">${sanitize(d.langs)}</div>`);
-    if (d && d.web) s.push(`<h4>Weboldal</h4><div class="val"><a href="${esc(d.web)}" target="_blank" rel="noopener">${esc(d.web.replace(/^https?:\/\//, '').slice(0, 40))}</a></div>`);
+    if (d && d.devs && d.devs.length) s.push(`<h4>${esc(T("s_dev"))}</h4><div class="val">${esc(d.devs.join(', '))}</div>`);
+    if (d && d.pubs && d.pubs.length) s.push(`<h4>${esc(T("s_pub"))}</h4><div class="val">${esc(d.pubs.join(', '))}</div>`);
+    { const gl = g.g && g.g.length ? g.g.map(genreName).join(", ") : d && d.genres && d.genres.join(", "); if (gl) s.push(`<h4>${esc(T("genre"))}</h4><div class="val">${esc(gl)}</div>`); }
+    if (g.t && g.t.length) s.push(`<h4>${esc(T("tags"))}</h4><div class="tags">${g.t.map((t) => `<span data-tag="${t}">${esc(tagName(t))}</span>`).join('')}</div>`);
+    if (d && d.ageSrc) s.push(`<h4>${esc(T("s_agesrc"))}</h4><div class="val">${esc(d.ageSrc)}</div>`);
+    if (d && d.notes) s.push(`<h4>${esc(T("s_notes"))}</h4><div class="val">${esc(d.notes)}</div>`);
+    if (d && d.cats && d.cats.length) s.push(`<h4>${esc(T("s_cats"))}</h4><div class="val">${esc(d.cats.join(' · '))}</div>`);
+    if (d && d.reqMin) s.push(`<h4>${esc(T("s_req"))}</h4><div class="req">${sanitize(d.reqMin)}</div>`);
+    if (d && d.langs) s.push(`<h4>${esc(T("s_langs"))}</h4><div class="req">${sanitize(d.langs)}</div>`);
+    if (d && d.web) s.push(`<h4>${esc(T("s_web"))}</h4><div class="val"><a href="${esc(d.web)}" target="_blank" rel="noopener">${esc(d.web.replace(/^https?:\/\//, '').slice(0, 40))}</a></div>`);
     const side = $('#mSide'); side.innerHTML = s.join('');
     side.querySelectorAll('[data-tag]').forEach((t) => t.onclick = () => { S.tags.set(+t.dataset.tag, 1); syncTagChips(); closeModal(); update(); });
   }
@@ -348,7 +355,7 @@
   // ------------------------------------------------------------ fordítás
   const trCache = {};
   async function gtx(text, tl) {
-    const u = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
+    const u = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${tl === 'he' ? 'iw' : tl}&dt=t&q=${encodeURIComponent(text)}`;
     const r = await fetch(u);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
@@ -358,7 +365,7 @@
     const box = $('#mDesc'), st = $('#mTrStatus'), id = current;
     if (!lang) { box.innerHTML = original; st.textContent = ''; return; }
     const key = id + ':' + lang;
-    if (trCache[key]) { box.innerHTML = trCache[key]; st.textContent = 'Gépi fordítás (Google Fordító)'; return; }
+    if (trCache[key]) { box.innerHTML = trCache[key]; st.textContent = T('tr_done'); return; }
     box.innerHTML = original;
     const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, { acceptNode: (n) => n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
     const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -369,7 +376,7 @@
       cur.push([n, t]); len += t.length + 1;
     }
     if (cur.length) chunks.push(cur);
-    st.textContent = 'Fordítás folyamatban…';
+    st.textContent = T('tr_busy');
     try {
       let done = 0;
       for (const ch of chunks) {
@@ -377,14 +384,14 @@
         const out = (await gtx(ch.map((x) => x[1]).join('\n'), lang)).split('\n');
         if (out.length === ch.length) ch.forEach(([n, t], i) => { const lead = /^\s/.test(n.nodeValue) ? ' ' : '', trail = /\s$/.test(n.nodeValue) ? ' ' : ''; n.nodeValue = lead + out[i].trim() + trail; });
         else { ch[0][0].nodeValue = out.join(' '); ch.slice(1).forEach(([n]) => { n.nodeValue = ' '; }); }
-        st.textContent = `Fordítás folyamatban… ${Math.round(++done / chunks.length * 100)}%`;
+        st.textContent = `${T("tr_busy")} ${Math.round(++done / chunks.length * 100)}%`;
       }
       trCache[key] = box.innerHTML;
-      st.textContent = 'Gépi fordítás (Google Fordító)';
+      st.textContent = T('tr_done');
     } catch (e) {
       box.innerHTML = original;
       const url = `https://translate.google.com/translate?sl=auto&tl=${lang}&u=${encodeURIComponent('https://store.steampowered.com/app/' + id + '/')}`;
-      st.innerHTML = `A fordítás most nem érhető el (${esc(e.message)}). <a href="${url}" target="_blank" rel="noopener">Megnyitás a Google Fordítóban ↗</a>`;
+      st.innerHTML = `${esc(T("tr_fail"))} <a href="${url}" target="_blank" rel="noopener">${esc(T("tr_open"))}</a>`;
     }
   }
   $('#mLang').addEventListener('change', (e) => {
@@ -394,9 +401,9 @@
   ['#mWeb', '#mFull'].forEach((s) => $(s).addEventListener('click', () => { if (current && window.track) window.track('steamweb-' + current, $('#mName').textContent); }));
 
   // ------------------------------------------------------------ indulás
-  $('#syncInfo').textContent = GAMES.length
-    ? `Adatok frissítve: ${META.updated || '?'} · ${(META.details || 0).toLocaleString('hu')} / ${(META.total || GAMES.length).toLocaleString('hu')} játéknak van részletes adata (méret, korhatár, teljes leírás).`
-    : 'Még nincs adat – futtasd a sync.ps1 szkriptet.';
+  $('#syncInfo').textContent = T('sync_info', META.updated || '?', num0(GAMES.length));
+  // a leírás-fordító lenyíló: minden nyelv (az angol az eredeti)
+  for (const [code, name] of (I.allLangs || I.langs)) if (code !== 'en') { const o = el('option'); o.value = code; o.textContent = name; $('#mLang').append(o); }
   buildFilters();
   update();
   route();
