@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4808310/1f0b4e1673c3c8ff7a0d594f62bb55b6e85c4612/header.jpg?t=1785384879">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/4808310.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Water Margin Online","url":"https://allfreegamesoftheworld.github.io/jatek/4808310.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4808310/1f0b4e1673c3c8ff7a0d594f62bb55b6e85c4612/header.jpg?t=1785384879","description":"《水滸歷險Online：重生》是一個大型線上角色扮演遊戲，遊戲將會把你帶到宋朝時期，你可與一眾梁山好漢大塊吃肉、大口喝酒，亦可與其他玩家一同聚義，成幫立寨，感受江湖中人的俠義精神。一百零八條梁山好漢皆為上應天命之人，分屬三十六天罡星、七十二地煞星，各懷神技，有文有武，各有所長，一段段的俠義故事將由你去重新演譯。 遊戲採用了實時戰鬥系統，配以獨有的戰陣及各種職業的專用技能。另外，各式的生活技能，強調故事性的章回小說式任務等可以讓你得到戰鬥以外的樂趣。 交友，消閒，娛樂是《水滸歷險Online：重生》的重點，結拜婚姻系統、有趣生動的感情指令、造型獨特的裝備，種種有趣的玩意將在遊戲內一一呈現。","genre":["Sokszereplős többjátékos","MMORPG","Történetgazdag","RPG","Történelmi","Gazdag háttértörténetű"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/4808310/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-4808310', gameName); });
 });

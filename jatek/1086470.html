@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086470/header.jpg?t=1559694630">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/1086470.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"996的真实老板篇","url":"https://allfreegamesoftheworld.github.io/jatek/1086470.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086470/header.jpg?t=1559694630","description":"这是一个模拟经营的文字小游戏，主要模拟国内IT公司，如何充分利用员工加班经营到高分的一个过程，内容源自现在比较有争议的996加班制问题，因为我算是见证网络游戏行业发展的人，结合10几年的经历对现在的状况是有一套自己的理解，1个月前突发奇想觉得可以做一个模拟这种加班利弊的小游戏，来表达自己的看法，于是就动手了，到今天才刚出炉，这部是老板篇，主要模拟经营游戏开发过程中如何把控员工情绪，提高工作效率，追求最大利益的一个过程，看看最终你会是一个什么结果。","genre":["Ingyenesen játszható","Könnyed","Szimuláció"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/1086470/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-1086470', gameName); });
 });

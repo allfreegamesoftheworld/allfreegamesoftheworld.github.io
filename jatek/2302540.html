@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2302540/c87e6d2b69d532fc54ff0efd0291de32f6f198f3/header.jpg?t=1784028528">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/2302540.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"花火与幽灵少女 - Hanabi and Ghost girl","url":"https://allfreegamesoftheworld.github.io/jatek/2302540.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2302540/c87e6d2b69d532fc54ff0efd0291de32f6f198f3/header.jpg?t=1784028528","description":"蝉鸣声中偏远的山中小镇，表面悠然而宁静，背后却隐藏着某个笼罩了这里数百年的黑暗秘密。女主角结城花火几年前跟随父母一同来到空铃镇，在父母的事故后因为内向的性格被排挤的她如今一个人生活在小镇上，直到在旧校舍邂逅本已死去的“幽灵”。","genre":["Kaland","Rejtvény","JRPG","Rejtély","Női főhős","Szürreális"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/2302540/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-2302540', gameName); });
 });

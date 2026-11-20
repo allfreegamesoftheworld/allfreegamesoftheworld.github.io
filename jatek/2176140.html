@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2176140/header.jpg?t=1709976429">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/2176140.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"云城异闻录","url":"https://allfreegamesoftheworld.github.io/jatek/2176140.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2176140/header.jpg?t=1709976429","description":"这是一款参考豫章书院真实事件改编的恐怖游戏，采用了全新的虚幻5引擎打造，这是一款独立游戏，由于我们没有开发经验所以可能一些地方、功能做的不够完美、完善，目前游戏依旧处于持续更新中，后需将推出更完善、更精彩的游戏内容、更大的地图、更丰富的场景，敬请期待","genre":["Kaland","Szimuláció","Rejtvény","3D ugrálós","3D","Horror"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/2176140/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-2176140', gameName); });
 });

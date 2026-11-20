@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5012600/63cb9c95f8f64e67e8ba5d0855120d8859b64043/header.jpg?t=1793396862">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/5012600.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Ticker \u0026 Trade","url":"https://allfreegamesoftheworld.github.io/jatek/5012600.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/5012600/63cb9c95f8f64e67e8ba5d0855120d8859b64043/header.jpg?t=1793396862","description":"Ticker \u0026amp; Trade is a multiplayer financial simulator. Trade stocks, options, and bonds on a real-time global order book. Build player corporations, launch mutual funds, react to market-shifting news events, and rise to the top of the leaderboards. Build your stock market empire!","genre":["Szimuláció","Többjátékos","Kapitalizmus","Idler","Szövegalapú","Gazdasági"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/5012600/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-5012600', gameName); });
 });

@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1447470/header.jpg?t=1628854692">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/1447470.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"全战天下","url":"https://allfreegamesoftheworld.github.io/jatek/1447470.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1447470/header.jpg?t=1628854692","description":"《全战天下》是一款全新的SLG战争策略游戏，游戏背景上我们抛开了单一历史时空的限制，将东西方文明中那些伟大的名字写到了游戏中，如果您热爱华夏文明，辅佐玄德公匡扶汉室，与嬴政白起一统六国，加入刘邦项羽的楚汉之争，携手成吉思汗征服亚欧将是您完美的选择，如果您喜欢日本战国，那就与三刀一流的宫本武藏，天下布武的织田信长一道征战沙场，您要是喜好欧美文明，我们推荐您选择圣女贞德，美杜莎、阿克琉斯来助您成就大业，经典英灵不胜枚举，阵容豪华堪称策略游戏的复仇者联盟。","genre":["Stratégia","Szimuláció","Történelmi","RTS","Háború","Katonai"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/1447470/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-1447470', gameName); });
 });

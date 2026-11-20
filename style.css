@@ -175,3 +175,17 @@ a.btn { display: inline-flex; color: var(--text); text-decoration: none; }
 .langSel { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 6px; font-size: 12px; padding: 2px 4px; max-width: 150px; cursor: pointer; }
 .langSel:hover { border-color: var(--accent); }
 .legalLang { display: flex; justify-content: flex-end; }
+
+/* képnézegető nyilakkal */
+.lightbox img { cursor: pointer; user-select: none; }
+.lightbox button { position: absolute; background: rgba(20,24,32,.75); color: #fff; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; cursor: pointer; display: grid; place-items: center; line-height: 1; }
+.lightbox button:hover { background: var(--accent, #4cc2ff); color: #000; }
+.lightbox .lbPrev, .lightbox .lbNext { top: 50%; transform: translateY(-50%); width: 56px; height: 56px; font-size: 40px; padding-bottom: 4px; }
+.lightbox .lbPrev { left: 16px; }
+.lightbox .lbNext { right: 16px; }
+.lightbox .lbClose { top: 14px; right: 16px; width: 42px; height: 42px; font-size: 20px; }
+.lightbox .lbCount { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); color: #ddd; font-size: 14px; background: rgba(0,0,0,.5); padding: 3px 10px; border-radius: 10px; }
+.lightbox [hidden] { display: none; }
+@media (max-width: 600px) { .lightbox .lbPrev, .lightbox .lbNext { width: 44px; height: 44px; font-size: 30px; } .lightbox .lbPrev { left: 6px; } .lightbox .lbNext { right: 6px; } }
+a.homeLink { color: inherit; text-decoration: none; cursor: pointer; }
+a.homeLink:hover h1 { color: var(--accent); }

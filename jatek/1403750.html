@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1403750/header.jpg?t=1614844546">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/1403750.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"街机金蟾捕鱼2","url":"https://allfreegamesoftheworld.github.io/jatek/1403750.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1403750/header.jpg?t=1614844546","description":"多样玩法：【免费福利】每日登陆海量免费福利，领到手软；【简单易赢】操作简单，无需氪金，免费赢赢赢，千万金币唾手可得；【比赛竞技】真人实时对战，弹头大奖争先抢；【超高倍大BOSS】超高倍率，玩法新颖，打到绝对赚到，必须一拼；【独特画风】古老部落，异域埃及，这里统统都有；丰富赛制：每天11-23点开启大奖挑战赛，夺宝奇兵，弹头部落独特玩法全天开放中","genre":["Könnyed","Árkád","2D","2D ugrálós","Sokszereplős többjátékos","Rajzfilm"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/1403750/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-1403750', gameName); });
 });

@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2075110/header.jpg?t=1794497290">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/2075110.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Incarnation","url":"https://allfreegamesoftheworld.github.io/jatek/2075110.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2075110/header.jpg?t=1794497290","description":"《迴魂》是一款以附身系統為主體架構的動作冒險遊戲，角色設計與遊戲劇情結合本土鬼怪元素， 遊戲美術以卡通渲染風格呈現， 與 Boss 戰鬥中加入簡易的 QTE 系統。故事背景是在敘述一個世界不斷的重建與毀滅， 而力量不斷的在輪迴之中傳承， 但因反抗輪迴而惹怒了天神， 並將這股力量撕成碎片散落於世界各處形成各種鬼怪， 而玩家在遊戲中扮演著必須取回力量的鬼魂， 運用附身能力來操控敵人， 並透過敵人的特性來進行解謎與戰鬥， 在每個區域會有提示去引導玩家要做的事情， 玩家也可以盡情地去砍殺敵人， 不管用的是哪種方式破關能破關的都是好方法， 打倒所有敵人去享受《迴魂》這款遊戲吧！","genre":["Akció","RPG","Akció-RPG","3D ugrálós","Hack and Slash","3D"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/2075110/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-2075110', gameName); });
 });

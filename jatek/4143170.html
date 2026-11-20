@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4143170/74f5001b49710bb43308d56b61bab75d656bc1a0/header.jpg?t=1764430048">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/4143170.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"有病才能当牛马 NullKitchenException","url":"https://allfreegamesoftheworld.github.io/jatek/4143170.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4143170/74f5001b49710bb43308d56b61bab75d656bc1a0/header.jpg?t=1764430048","description":"《有病才能当牛马》是一款第一人称叙事 + 日常经营 + 心理恐怖元素的七日循环游戏。 “欢迎回来，今天也要努力打工哦。” 你在外卖店工作七天，却永远走不到第八天。 音乐在扭曲，铁桌在旋转，自己在消失。 有人说这只是精神错乱，也有人说—— 你早就死在第一次加班的那天夜里。 你还有使命—— 修复这段崩坏的日常，或成为其中一部分。","genre":["Könnyed","Szimuláció","Stratégiai RPG","Rejtvény","Üzletvezetés","3D"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/4143170/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-4143170', gameName); });
 });

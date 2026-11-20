@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2712730/header.jpg?t=1702965275">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/2712730.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"杉木花与风信子 Fir flowers and hyacinths","url":"https://allfreegamesoftheworld.github.io/jatek/2712730.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2712730/header.jpg?t=1702965275","description":"这是一部使用RPGMAKERMZ 制作的像素风开放世界视觉小说。 作品讲述了主角在朋友的葬礼上，收到了来自朋友赠送的含有自己生前记忆的胶带。 在已故朋友生前准备的引导下，一步步解开心结，走出过去，面对新生活的故事。 游戏时常大概在一个半小时左右，无论您是否喜欢这部作品，都希望能看到您的评论。 您的评论会成为我前进的动力，我正在进行下一个故事的创作，也欢迎联系我提出您的宝贵意见。 最后，希望您玩的开心，谢谢。","genre":["Történetgazdag","Vizuális regény","Szókitaláló","Nyílt világ","Könnyed","Anime"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/2712730/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-2712730', gameName); });
 });

@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3183020/header.jpg?t=1731326825">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/3183020.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"逗鱼达人","url":"https://allfreegamesoftheworld.github.io/jatek/3183020.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3183020/header.jpg?t=1731326825","description":"《逗鱼达人》2024年全新捕鱼大作震撼面世！完美还原经典捕鱼玩法，旨在带给您捕鱼真正的快乐！超高倍率，爆金不停，打哪爆哪，拒绝铁鱼，让您享受轻松秒鱼的快感！国内顶尖美术团队倾力打造，渔场全面升级，特效精美创新，给您前所未有的视觉盛宴！应接不暇的古老神秘国风BOSS，全新独特玩法超高翻倍，持续享受金币爆屏的爽快体验！盘踞神域的四象圣兽，圣兽修炼越强大特权越惊人，每升一级都有无限可能！独家炮台翅膀，让您一进房间就成为全场视线的焦点！所有炮台均有独特攻击特效，给您酷炫畅爽的体验!怀旧千炮捕鱼，还是熟悉的味道！不氪，不肝，不卷，不耗时，真正畅快玩捕鱼！","genre":["Könnyed","Kaland","Szimuláció","Stratégia","Szoftver","Árkád"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/3183020/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-3183020', gameName); });
 });

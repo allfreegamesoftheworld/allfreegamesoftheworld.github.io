@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/985020/header.jpg?t=1575551365">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/985020.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Three Kingdoms：Ancient battlefield | 三国古战略","url":"https://allfreegamesoftheworld.github.io/jatek/985020.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/985020/header.jpg?t=1575551365","description":"这是一款三国开房间即时联机游戏，玩法上你可以想象以前我们所玩的《三国群英传》或其它单机攻城类三国游戏的一种联机化改编，游戏可以多人对战，混战，组队打电脑等，一局时间在10~60分钟之间，具体视不同模式而定，比如混战会久一点，因为你要打败大部分对手，争取高分，而对战就短一点，因为对方一旦弱势可能就认输了。总之这个游戏玩法经过我2年多的折腾，现在结构算比较合理，当然里面也包含了一般的养成元素，游戏免费，但充钱玩的舒服无法避免，不过我尽量控制平衡（作者提示里说的内容），总的来说游戏倾向玩家自身技术硬实力，花钱为辅助，游戏中最强的玩家一般是弱氪，但很擅研究的人，整体比例是（技术70%）（氪金30%），我不隐瞒任何收费情况，真实坦荡，所以喜欢的就请加入进来吧。","genre":["Stratégia","Ingyenesen játszható","Sokszereplős többjátékos","Szimuláció","Indie"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/985020/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-985020', gameName); });
 });

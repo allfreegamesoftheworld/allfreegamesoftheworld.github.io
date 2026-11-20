@@ -237,6 +237,23 @@
     $('#rating').value = '0'; $('#sizeUnknown').checked = true; $('#ageUnknown').checked = true;
     syncAll(); update();
   });
+  // logó / cím: vissza a kezdőképernyőre, minden szűrés és keresés törlése
+  function goHome(e) {
+    if (e && (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1)) return;
+    if (e) e.preventDefault();
+    if (window.closeGallery) window.closeGallery();
+    if (!$('#modal').hidden) closeModal();
+    clearTimeout(qTimer);
+    $('#q').value = ''; S.q = '';
+    $('#tagSearch').value = ''; renderTagList();
+    S.sort = 'pop'; $('#sort').value = 'pop';
+    $('#filters').classList.remove('open');
+    $('#filters').scrollTop = 0;
+    $('#reset').click();
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  ['#homeLogo', '#homeTitle'].forEach((s) => $(s).addEventListener('click', goHome));
 
   // ------------------------------------------------------------ részletek ablak
   const pending = {};
@@ -286,7 +303,8 @@
     // képek, videó
     const media = $('#mMedia');
     if (d && d.movie) { const v = el('video'); v.src = d.movie.src; v.poster = d.movie.poster; v.controls = true; v.preload = 'none'; v.muted = true; media.append(v); }
-    for (const s of (d && d.shots) || []) { const im = el('img'); im.loading = 'lazy'; im.src = s.t; im.onclick = () => lightbox(s.f); media.append(im); }
+    const shots = (d && d.shots) || [];
+    shots.forEach((s, i) => { const im = el('img'); im.loading = 'lazy'; im.src = s.t; im.alt = ''; im.onclick = () => window.openGallery(shots.map((x) => x.f), i); media.append(im); });
     // leírás
     // csak a rövid hivatalos ismertető – a teljes leírás a Steamen olvasható (szerzői jogi okból nem másoljuk át)
     original = d && d.short ? `<p class="lead">${esc(d.short)}</p>` : `<p class="small">${esc(T('no_short'))}</p>`;
@@ -328,10 +346,10 @@
     const side = $('#mSide'); side.innerHTML = s.join('');
     side.querySelectorAll('[data-tag]').forEach((t) => t.onclick = () => { S.tags.set(+t.dataset.tag, 1); syncTagChips(); closeModal(); update(); });
   }
-  function closeModal() { $('#modal').hidden = true; document.body.style.overflow = ''; current = null; $('#mMedia').querySelectorAll('video').forEach((v) => v.pause()); if (location.hash) history.replaceState(null, '', location.pathname + location.search); }
-  function lightbox(src) { const lb = el('div', 'lightbox', `<img src="${src}" alt="">`); lb.onclick = () => lb.remove(); document.body.append(lb); }
+  function closeModal() { if (window.closeGallery) window.closeGallery(); $('#modal').hidden = true; document.body.style.overflow = ''; current = null; $('#mMedia').querySelectorAll('video').forEach((v) => v.pause()); if (location.hash) history.replaceState(null, '', location.pathname + location.search); }
+
   document.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', closeModal));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const lb = $('.lightbox'); if (lb) lb.remove(); else if (!$('#modal').hidden) closeModal(); } });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !(window.galleryOpen && window.galleryOpen()) && !$('#modal').hidden) closeModal(); });
   function route() { const m = location.hash.match(/^#\/app\/(\d+)/); if (m) openModal(+m[1]); else if (!$('#modal').hidden) closeModal(); }
   window.addEventListener('hashchange', route);
 

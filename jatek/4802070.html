@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4802070/b82bcf1d524d4b513a5269389fc12bd1219a1e18/header.jpg?t=1789535953">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/4802070.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"问道长歌","url":"https://allfreegamesoftheworld.github.io/jatek/4802070.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4802070/b82bcf1d524d4b513a5269389fc12bd1219a1e18/header.jpg?t=1789535953","description":"“没有挂机，没有轻松——国风硬核修仙，胜者飞升！”踏入《 问道长歌》，进入一个真正的残酷修仙世界！没有自动寻路，也没有满屏逼氪，一切靠操作与策略说话。探索上古遗迹、夺取神秘法宝、与仙魔妖兽殊死搏斗——弱者被淘汰，强者独占巅峰。真实战斗、残酷争夺、自由冒险，这里只有敢于挑战极限的修仙者才能飞升成仙，体验硬核非凡修仙！","genre":["Akció","Stratégia","Kaland","Szimuláció","Akció-RPG","RPG"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/4802070/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-4802070', gameName); });
 });

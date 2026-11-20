@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4281170/84c7dee79aa3b838ad9255f1ef3c82b544fc946a/header.jpg?t=1773599085">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/4281170.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"무명기록부(Mumyeonggjrokbu)","url":"https://allfreegamesoftheworld.github.io/jatek/4281170.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4281170/84c7dee79aa3b838ad9255f1ef3c82b544fc946a/header.jpg?t=1773599085","description":"【 무명기록부 】는 졸업작품으로 기획되어 2인으로 구성된 팀이 약 8개월간 개발 및 제작된 프로젝트이며, 한국 설화와 괴담을 근현대적 격리 서사로 재해석한 어반 판타지 비주얼 노벨이다. 현대 도시 속 한국적 오컬트 공간을 탐색하며 파편화된 정보를 수집·추리해 격리체의 정체와 본질을 밝혀낸다. 조사 및 정리하고, 도깨비 탈에 봉인된 권능을 활용해 격리 탈출 사건을 진압해 다시 격리한다. 주인공이 소속된 비밀 기업은 양반탈·초랭이탈·이매탈·사자탈로 상징되는 네 부서로 구성되며, 각 탈은 부서의 역할과 성격을 규정한다.","genre":["Vizuális regény","Rajzfilmszerű","Kaland","Fantasy","2D","Tervezés és illusztrálás"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/4281170/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-4281170', gameName); });
 });

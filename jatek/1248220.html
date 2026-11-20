@@ -12,14 +12,14 @@
 <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1248220/header.jpg?t=1612704721">
 <meta property="og:url" content="https://allfreegamesoftheworld.github.io/jatek/1248220.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=202611202300">
+<link rel="stylesheet" href="../style.css?v=202611210300">
 <script src="../i18n.js?v=202611202300"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"无上道","url":"https://allfreegamesoftheworld.github.io/jatek/1248220.html","image":"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1248220/header.jpg?t=1612704721","description":"《无上道》是款东方仙侠题材的ARPG网页游戏，主要讲述了主角聚集神州和四荒改造为永界，领导众生走向全新文明的故事。 游戏画面大场景绘图、特色打斗效果设计、丰富的人物造型，将角色的英雄儿女气概展现地淋漓尽致，高度展现唯美仙侠世界。 玩法方面，伴随着剧情推进，各类高级神器、神秘灵宝将不断升级解锁，玩家战力也会随之提升，远古神物、威武坐骑、激萌伙伴，都将一一来到，并一直陪伴玩家战斗。","genre":["Ingyenesen játszható","Akció","Sokszereplős többjátékos","RPG","Indie"],"gamePlatform":"PC","applicationCategory":"Game","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://store.steampowered.com/app/1248220/"}}</script>
 </head>
 <body class="page">
 <header class="top">
   <div class="brand">
-    <a href="../" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
+    <a href="../" title="Kezdőoldal" style="text-decoration:none;color:inherit;display:flex;gap:10px;align-items:center"><span class="logo">▶</span>
     <div><div class="h1">All Free Games of the World</div><div class="sub" data-i18n="back">← vissza a teljes listához és a szűrőkhöz</div></div></a>
   </div>
   <div class="brandLinks" style="margin-left:auto"><a class="legalLink" href="../jogi.html" data-i18n="legal">⚖ Jogi szerződések</a> <label class="langPick">🌐 <select class="langSel" aria-label="Language / Nyelv"></select></label></div>
@@ -66,8 +66,11 @@
 </footer>
 <script src="../stats-config.js"></script>
 <script src="../tracker.js"></script>
+<script src="../gallery.js?v=202611210300"></script>
 <script>
 var gameName = document.querySelector('.gname').textContent;
+var shotLinks = Array.prototype.slice.call(document.querySelectorAll(".media a"));
+shotLinks.forEach(function (a, i) { a.addEventListener("click", function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || !window.openGallery) return; e.preventDefault(); window.openGallery(shotLinks.map(function (x) { return x.href; }), i); }); });
 document.querySelectorAll('a[href^="https://store.steampowered.com/app/"]').forEach(function (a) {
   if (a.id !== 'steamBtn') a.addEventListener('click', function () { window.track && window.track('steamweb-1248220', gameName); });
 });
