@@ -33,6 +33,15 @@
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   @media (max-width: 800px) { .two { grid-template-columns: 1fr; } }
   .muted { color: var(--muted); font-size: 12.5px; }
+  .topList { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .topItem { display: flex; gap: 10px; align-items: center; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 8px; color: inherit; text-decoration: none; }
+  .topItem:hover { border-color: var(--accent); }
+  .topItem img { width: 92px; aspect-ratio: 460/215; object-fit: cover; border-radius: 6px; flex: none; background: #0a0d12; }
+  .topItem .tn { font-weight: 600; font-size: 14px; line-height: 1.25; }
+  .topItem .ts { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+  .topItem .ts b { color: var(--text); }
+  .topItem .rank { font-weight: 700; color: var(--muted); width: 22px; text-align: right; flex: none; }
+  .kpi.click { cursor: pointer; } .kpi.click:hover { border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -74,6 +83,10 @@
     <span class="muted" id="updated"></span>
   </div>
   <div class="kpis" id="kpis"></div>
+  <div class="panelBox">
+    <h2>🎮 Megnyitott játékok <span class="muted" id="topNote"></span></h2>
+    <div id="topGames"></div>
+  </div>
   <div class="panelBox"><h2>Látogatók naponta</h2><div class="chart" id="chart"></div><div class="muted" id="chartNote"></div></div>
   <div class="panelBox">
     <div class="bar"><h2>Játékok</h2><input class="input" id="gameFilter" placeholder="Szűrés név szerint…" style="max-width:260px"></div>
@@ -105,6 +118,6 @@
 <script src="../stats-config.js?v=202611200015"></script>
 <script src="vault.js?v=20261120002038"></script>
 <script src="../data/games.js"></script>
-<script src="admin.js?v=202611200015"></script>
+<script src="admin.js?v=202611201940"></script>
 </body>
 </html>

@@ -143,14 +143,27 @@
     }
     gameRows = [...games.values()].map((g) => ({ ...g, conv: (g.open + g.page) ? Math.round(((g.steam + g.web) / (g.open + g.page)) * 100) : 0 }));
     const visits = total.total || 0;
-    const kpi = (v, l) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`;
+    const kpi = (v, l, jump) => `<div class="kpi${jump ? ' click' : ''}"${jump ? ` data-jump="${jump}" title="Kattints a részletekért"` : ''}><div class="v">${v}</div><div class="l">${l}${jump ? ' ↓' : ''}</div></div>`;
     $('#kpis').innerHTML =
       kpi(fmt(visits), 'Oldalmegtekintés (látogató × oldal)') +
-      kpi(fmt(opens), 'Játék megnyitva (ablak)') +
-      kpi(fmt(gameRows.reduce((a, g) => a + g.page, 0)), 'Játékoldal megtekintve (pl. Google-ből)') +
-      kpi(fmt(steam), '„Beszerzés Steamen” kattintás') +
-      kpi(fmt(web), 'Steam-weboldal link kattintás') +
-      kpi(fmt(games.size), 'Különböző játék, amit megnéztek');
+      kpi(fmt(opens), 'Játék megnyitva (ablak)', 'topGames') +
+      kpi(fmt(gameRows.reduce((a, g) => a + g.page, 0)), 'Játékoldal megtekintve (pl. Google-ből)', 'gamesTable') +
+      kpi(fmt(steam), '„Beszerzés Steamen” kattintás', 'gamesTable') +
+      kpi(fmt(web), 'Steam-weboldal link kattintás', 'gamesTable') +
+      kpi(fmt(games.size), 'Különböző játék, amit megnéztek', 'topGames');
+    document.querySelectorAll('.kpi[data-jump]').forEach((k) => k.addEventListener('click', () => document.getElementById(k.dataset.jump).scrollIntoView({ behavior: 'smooth', block: 'center' })));
+
+    // megnyitott játékok – nevekkel, képpel, azonnal látható
+    const IMGS = new Map((window.GAMES || []).map((g) => [String(g.i), g.h]));
+    const top = gameRows.filter((g) => g.open + g.page + g.steam + g.web > 0)
+      .sort((a, b) => (b.open + b.page) - (a.open + a.page) || b.steam - a.steam);
+    $('#topNote').textContent = top.length ? `– ${fmt(top.length)} játék` + (top.length > 30 ? ' (az első 30; a többi lent a táblázatban)' : '') : '';
+    $('#topGames').innerHTML = top.length ? '<div class="topList">' + top.slice(0, 30).map((g, i) => {
+      const h = IMGS.get(g.id); const img = h ? 'https://shared.fastly.steamstatic.com/store_item_assets/' + h : `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${g.id}/header.jpg`;
+      return `<a class="topItem" href="../jatek/${g.id}.html" target="_blank"><span class="rank">${i + 1}.</span><img src="${esc(img)}" alt="" loading="lazy"><div>
+        <div class="tn">${esc(g.name || '#' + g.id)}</div>
+        <div class="ts"><b>${fmt(g.open + g.page)}</b> megnyitás · <b>${fmt(g.steam + g.web)}</b> Steamre kattintás</div></div></a>`;
+    }).join('') + '</div>' : '<p class="muted">Ebben az időszakban még nem nyitottak meg játékot.</p>';
     $('#updated').textContent = auth.code === 'demo' ? '⚠ BEMUTATÓ MÓD – kitalált adatok, csak a felület kipróbálásához' : 'Frissítve: ' + new Date().toLocaleString('hu');
 
     // napi grafikon
