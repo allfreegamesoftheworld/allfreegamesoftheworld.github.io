@@ -9,8 +9,8 @@
 
   // ------------------------------------------------------------ szövegek
   var TX = {
-    title: ['Játékajánló', 'Game finder'],
-    fab: ['Játékajánló', 'Game finder'],
+    title: ['Játékajánló AI', 'Game finder AI'],
+    fab: ['Játékajánló AI', 'Game finder AI'],
     ph: ['Írd le, milyen játékot keresel…', 'Describe the game you are looking for…'],
     send: ['Küldés', 'Send'],
     hello: ['Szia! 👋 Segítek játékot választani a(z) {0} ingyenes játék közül. Írd le, kinek és milyen játék kellene, például:',
