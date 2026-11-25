@@ -1,6 +1,8 @@
-/* Játékajánló chatbot – teljesen a böngészőben fut, a beírt szöveg nem megy el sehova. */
+/* Játékajánló AI – a kérést egy AI (Cloudflare Workers AI) értelmezi és választ a jelöltek közül;
+   ha az AI nem érhető el, a böngészőben futó szabályalapú ajánló dolgozik. */
 (function () {
   'use strict';
+  var AI_URL = 'https://afg-ai.allfreegames.workers.dev'; // a Cloudflare Worker címe (üres = csak a beépített ajánló)
   var META = window.META || { tags: {} };
   var I = window.i18n || { lang: 'hu', tag: function () { return null; } };
   var HU = I.lang === 'hu';
@@ -49,6 +51,7 @@
     reviews: ['értékelés', 'reviews'],
     close: ['Bezárás', 'Close'],
     note: ['A beírt szöveg nem megy el sehova – az ajánló a te böngésződben fut.', 'Nothing you type leaves your browser – the finder runs on your device.'],
+    noteAi: ['Mesterséges intelligencia válaszol (Cloudflare Workers AI). A szöveget nem tároljuk – ne írj be személyes adatot.', 'Answers come from an AI (Cloudflare Workers AI). Your text is not stored – please do not enter personal data.'],
   };
   function t(k) { var v = TX[k][HU ? 0 : 1]; for (var i = 1; i < arguments.length; i++) v = v.split('{' + (i - 1) + '}').join(arguments[i]); return v; }
 
@@ -242,6 +245,7 @@
     (c.extra || []).forEach(function (x) { want[x] = 2; groups.push([x]); });
     var block = {};
     c.not.forEach(function (ki) { KW_IDS[ki].forEach(function (x) { block[x] = 1; }); });
+    (c.notIds || []).forEach(function (x) { block[x] = 1; });
     if (c.age != null && c.age < 13) KID_BLOCK.forEach(function (x) { if (!want[x]) block[x] = 1; });
     else if (c.age != null && c.age < 16) TEEN_BLOCK.forEach(function (x) { if (!want[x]) block[x] = 1; });
     var boost = {};
@@ -297,7 +301,7 @@
   panel.innerHTML = '<header class="cbHead"><span class="cbBot">🤖</span><b>' + esc(t('title')) + '</b><button type="button" class="cbX" aria-label="' + esc(t('close')) + '">✕</button></header>' +
     '<div class="cbMsgs" role="log" aria-live="polite"></div>' +
     '<form class="cbForm"><input class="cbIn" type="text" maxlength="300" autocomplete="off" placeholder="' + esc(t('ph')) + '"><button class="cbSend" type="submit" aria-label="' + esc(t('send')) + '">➤</button></form>' +
-    '<div class="cbNote">' + esc(t('note')) + '</div>';
+    '<div class="cbNote">' + esc(t(AI_URL ? 'noteAi' : 'note')) + '</div>';
   document.body.append(fab, panel);
   var msgs = panel.querySelector('.cbMsgs'), input = panel.querySelector('.cbIn');
   var state = null, results = [], shown = 0, greeted = false;
@@ -333,6 +337,7 @@
     c.want.forEach(function (ki) { p.push('✔ ' + KW[ki][HU ? 2 : 3]); });
     (c.extra || []).forEach(function (x) { p.push('✔ ' + tagLabel(x)); });
     c.not.forEach(function (ki) { p.push('✖ ' + t('not', KW[ki][HU ? 2 : 3])); });
+    (c.notIds || []).forEach(function (x) { p.push('✖ ' + t('not', tagLabel(x))); });
     if (c.sizeMax != null) p.push('💾 ' + t('size', String(c.sizeMax).replace('.', HU ? ',' : '.')));
     if (c.modeLabel) p.push('🎮 ' + t(c.modeLabel));
     if (c.plat) p.push('🖥 ' + ({ m: 'macOS', l: 'Linux', d: 'Steam Deck', v: 'VR' })[c.plat]);
@@ -348,6 +353,7 @@
       var why = r.why.slice(0, 4).map(function (x) { return '<span>' + esc(tagLabel(x)) + '</span>'; }).join('');
       a.innerHTML = '<img loading="lazy" alt="" src="' + esc(img(g)) + '"><div class="cbCB"><div class="cbCN">' + esc(g.n) + '</div>' +
         '<div class="cbCM">💾 ' + fmtSize(g.s) + (g.a != null ? ' · ' + g.a + '+' + (g.ae ? '?' : '') : '') + (g.c ? ' · 👍 ' + g.r + '%' : '') + '</div>' +
+        (r.ai ? '<div class="cbWhy">💡 ' + esc(r.ai) + '</div>' : '') +
         (why ? '<div class="cbCT">' + why + '</div>' : '') + '</div>';
       a.querySelector('img').onerror = function () { this.onerror = null; this.src = 'https://cdn.akamai.steamstatic.com/steam/apps/' + g.i + '/capsule_616x353.jpg'; };
       a.onclick = function (e) { if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) return; e.preventDefault(); location.hash = '#/app/' + g.i; window.track && window.track('chatbot-ajanlas-' + g.i, g.n); };
@@ -397,6 +403,73 @@
     text = String(text || '').trim(); if (!text) return;
     user(text);
     window.track && window.track('chatbot-kerdes', 'Játékajánló kérdés');
+    if (AI_URL && Date.now() > aiDownUntil) aiAsk(text); else ruleAsk(text);
+  }
+
+  // ------------------------------------------------------------ AI mód
+  var aiHist = [], aiDownUntil = 0;
+  var MODES = { friends: [9, 38, 1, 24], online: [1, 36, 38], local: [24], solo: [2] };
+  function post(path, data) {
+    return Promise.race([
+      fetch(AI_URL + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+        .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }),
+      new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout')); }, 20000); }),
+    ]);
+  }
+  function fromIntent(it) {
+    return {
+      want: [], not: [], extra: ids(it.tags || []), notIds: ids(it.exclude || []),
+      age: it.age, kid: it.age != null && it.age < 13, gender: it.gender === 'g' ? 'g' : it.gender === 'b' ? 'b' : null,
+      sizeMax: it.max_gb, modes: MODES[it.mode] || null, modeLabel: MODES[it.mode] ? it.mode : null,
+      plat: ({ mac: 'm', linux: 'l', deck: 'd', vr: 'v' })[it.platform] || null,
+      newer: !!it.newer, popular: !!it.popular, any: true,
+    };
+  }
+  var tagEn = function (id) { var m = META.tags[id]; return m ? m[1] : ''; };
+  function aiAsk(text) {
+    var nn = deacc(text).replace(/[^a-z0-9 ]/g, ' ').trim();
+    if (state && /^(meg|mast|tobbet|tovabb|more|other|next|others|mutass meg|meg tobbet|meg mast|mutass tobbet)( .*)?$/.test(nn) && nn.split(' ').length <= 3) { showMore(); return; }
+    aiHist.push({ r: 'u', t: text }); if (aiHist.length > 8) aiHist = aiHist.slice(-8);
+    var typing = add('bot typing', '<span></span><span></span><span></span>');
+    var lang = I.lang || 'hu', crit = null;
+    post('/intent', { lang: lang, hist: aiHist }).then(function (it) {
+      if (!it.search) { typing.remove(); add('bot', esc(it.reply || t('dunno'))); aiHist.push({ r: 'b', t: it.reply || '' }); return; }
+      crit = fromIntent(it);
+      // „mutass még” csak akkor, ha a kívánságok nem változtak (az AI néha tévesen jelzi)
+      var same = state && JSON.stringify((state.extra || []).slice().sort()) === JSON.stringify(crit.extra.slice().sort()) &&
+        JSON.stringify((state.notIds || []).slice().sort()) === JSON.stringify(crit.notIds.slice().sort()) &&
+        state.age === crit.age && state.sizeMax === crit.sizeMax && state.modeLabel === crit.modeLabel && state.plat === crit.plat;
+      if (it.more && same) { typing.remove(); showMore(); return; }
+      var res = recommend(crit);
+      if (!res.length) { typing.remove(); if (it.reply) add('bot', esc(it.reply)); run(crit); return; }
+      var cand = res.slice(0, 20);
+      var q = aiHist.filter(function (m) { return m.r === 'u'; }).slice(-3).map(function (m) { return m.t; }).join(' / ');
+      return post('/pick', {
+        lang: lang, q: q,
+        games: cand.map(function (r) { var g = r.g; return { i: g.i, n: g.n, t: (g.t || []).slice(0, 8).map(tagEn).filter(Boolean), s: fmtSize(g.s), a: g.a, r: g.c ? g.r : null, c: g.c || 0 }; }),
+      }).then(function (pk) {
+        typing.remove();
+        var byId = {}; cand.forEach(function (r) { byId[r.g.i] = r; });
+        var cjk = /^(zh|ja|ko)/.test(lang) ? null : /[　-鿿가-힯]+/g;
+        var clean = function (s) { return cjk ? String(s || '').replace(cjk, '') : s; };
+        var picked = (pk.picks || []).map(function (p) { var r = byId[p.i]; return r ? { g: r.g, why: r.why, ai: clean(p.why) } : null; }).filter(Boolean);
+        if (!picked.length) picked = cand.slice(0, 4);
+        var pid = picked.map(function (p) { return p.g.i; });
+        state = crit; results = picked.concat(res.filter(function (r) { return pid.indexOf(r.g.i) < 0; })); shown = picked.length;
+        if (it.reply) add('bot', esc(it.reply));
+        var p = summary(crit);
+        if (p.length) add('bot', '<div class="cbSum"><b>' + esc(t('understood')) + '</b> ' + p.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div>');
+        add('bot', esc(clean(pk.intro) || t('found'))); cards(picked); followUps();
+        aiHist.push({ r: 'b', t: (it.reply || '') + ' [Recommended: ' + picked.map(function (x) { return x.g.n; }).join(', ') + ']' });
+      });
+    }).catch(function () {
+      typing.remove();
+      aiDownUntil = Date.now() + 60000;
+      if (crit) run(crit); else ruleAsk(text);
+    });
+  }
+
+  function ruleAsk(text) {
     var n = deacc(text).replace(/[^a-z0-9 ]/g, ' ').trim();
     var typing = add('bot typing', '<span></span><span></span><span></span>');
     setTimeout(function () {

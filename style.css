@@ -221,6 +221,7 @@ a.homeLink:hover h1 { color: var(--accent); }
 .cbCM { color: var(--muted); font-size: 12px; margin-top: 3px; }
 .cbCT { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .cbCT span { font-size: 11px; padding: 1px 6px; border-radius: 6px; background: rgba(255,255,255,.07); color: var(--muted); }
+.cbWhy { font-size: 12.5px; line-height: 1.35; margin-top: 5px; color: var(--text); background: rgba(76,194,255,.08); border-left: 2px solid var(--accent); padding: 4px 7px; border-radius: 6px; }
 .cbForm { display: flex; gap: 8px; padding: 10px; border-top: 1px solid var(--line); }
 .cbIn { flex: 1; min-width: 0; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 10px 14px; font-size: 14px; outline: none; }
 .cbIn:focus { border-color: var(--accent, #4cc2ff); }
