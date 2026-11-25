@@ -306,8 +306,17 @@
   var msgs = panel.querySelector('.cbMsgs'), input = panel.querySelector('.cbIn');
   var state = null, results = [], shown = 0, greeted = false;
 
-  function scroll() { msgs.scrollTop = msgs.scrollHeight; }
-  function add(cls, html) { var d = document.createElement('div'); d.className = 'cbMsg ' + cls; d.innerHTML = html; msgs.append(d); scroll(); return d; }
+  // görgetés: a válasz ELEJE legyen látható (nem ugrik az aljára)
+  var anchor = null, waitAnchor = false;
+  function scroll() {
+    if (anchor && anchor.isConnected) { msgs.scrollTop += anchor.getBoundingClientRect().top - msgs.getBoundingClientRect().top - 8; return; }
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+  function add(cls, html) {
+    var d = document.createElement('div'); d.className = 'cbMsg ' + cls; d.innerHTML = html; msgs.append(d);
+    if (waitAnchor && cls.indexOf('bot') === 0 && cls.indexOf('typing') < 0) { anchor = d; waitAnchor = false; }
+    scroll(); return d;
+  }
   function chips(list) {
     var d = document.createElement('div'); d.className = 'cbChips';
     list.forEach(function (c) { var b = document.createElement('button'); b.type = 'button'; b.className = 'cbChip'; b.textContent = c[0]; b.onclick = c[1]; d.append(b); });
@@ -397,7 +406,7 @@
     var n = c.not.indexOf(ki); if (n >= 0) c.not.splice(n, 1);
     run(c);
   }
-  function user(text) { add('user', esc(text)); }
+  function user(text) { anchor = null; waitAnchor = false; add('user', esc(text)); waitAnchor = true; }
 
   function ask(text) {
     text = String(text || '').trim(); if (!text) return;
