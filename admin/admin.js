@@ -92,19 +92,30 @@
   const hoursAgo = (h) => { const d = new Date(Date.now() - h * 3600e3); d.setMinutes(0, 0, 0); return d; };
   const nextHour = () => { const d = new Date(Date.now() + 3600e3); d.setMinutes(0, 0, 0); return d; };
   const iso = (d) => d.toISOString().replace(/\.\d{3}Z$/, 'Z');
-  async function api(path, params) {
+  // A GoatCounter legfeljebb ~4 kérést enged másodpercenként; ha túllépjük, az előzetes (CORS) kérést is
+  // elutasítja, amit a böngésző hálózati hibaként lát. Ezért a kéréseket sorba állítjuk és újrapróbáljuk.
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+  let lastReq = 0, queue = Promise.resolve();
+  function throttle() {
+    const p = queue.then(async () => { const wait = lastReq + 350 - Date.now(); if (wait > 0) await sleep(wait); lastReq = Date.now(); });
+    queue = p.catch(() => {}); return p;
+  }
+  async function api(path, params, tries = 0) {
     if (auth.code === 'demo') return demo(path, params);
     const qs = new URLSearchParams();
     for (const [k, v] of Object.entries(params || {})) (Array.isArray(v) ? v : [v]).forEach((x) => qs.append(k, x));
+    const backoff = () => sleep(1500 * (tries + 1));
     let r;
+    await throttle();
     try {
       r = await fetch(`https://${encodeURIComponent(auth.code)}.goatcounter.com${path}?${qs}`, { headers: { Authorization: 'Bearer ' + auth.key, 'Content-Type': 'application/json' } });
     } catch (e) {
+      if (tries < 4) { await backoff(); return api(path, params, tries + 1); }
       throw new Error(`A GoatCounter nem érhető el innen (hálózati vagy böngésző-korlátozás). Az adatokat a <a href="https://${esc(auth.code)}.goatcounter.com" target="_blank" rel="noopener">GoatCounter irányítópultján</a> is megnézheted.`);
     }
     if (r.status === 401) throw new Error('Hibás GoatCounter-kód vagy hozzáférési kód.');
     if (r.status === 403) throw new Error('A hozzáférési kódnak nincs olvasási joga a statisztikához.');
-    if (r.status === 429) { await new Promise((res) => setTimeout(res, 1200)); return api(path, params); }
+    if (r.status === 429 && tries < 6) { await backoff(); return api(path, params, tries + 1); }
     if (!r.ok) throw new Error('GoatCounter hiba: HTTP ' + r.status);
     return r.json();
   }
@@ -116,7 +127,6 @@
       for (const h of r.hits || []) if (!seen.has(h.path_id)) { seen.add(h.path_id); out.push(h); added++; }
       if (!r.more || !added) break;
       exclude = [...seen];
-      await new Promise((res) => setTimeout(res, 260)); // max. 4 kérés/mp
     }
     return out;
   }
@@ -194,7 +204,10 @@
     $('#trTable tbody').innerHTML = rows(tr.sort((a, b) => b[1] - a[1]).map(([t, c]) => [esc(t.replace(/^Fordítás: /, '')), c]), 'Még senki nem fordított.');
     const statRows = (r) => ((r && (r.stats || r.hits)) || []).map((s) => [esc(s.name || s.id || '(közvetlen)'), s.count]);
     $('#refsTable tbody').innerHTML = rows(statRows(refs), refs ? 'Még nincs adat.' : 'Nem érhető el.');
-    $('#locTable tbody').innerHTML = rows(statRows(locs), locs ? 'Még nincs adat.' : 'Nem érhető el.');
+    let regionHu = null; try { regionHu = new Intl.DisplayNames(['hu'], { type: 'region' }); } catch { /* régi böngésző */ }
+    const country = (s) => { const code = String(s.id || '').split('-')[0].toUpperCase(); try { if (regionHu && /^[A-Z]{2}$/.test(code)) return regionHu.of(code); } catch { /* ismeretlen kód */ } return s.name || s.id || '?'; };
+    const locRows = ((locs && locs.stats) || []).map((s) => [esc(country(s)), s.count]);
+    $('#locTable tbody').innerHTML = rows(locRows, locs ? 'Még nincs adat.' : 'Nem érhető el.');
   }
 
   function renderGames() {
